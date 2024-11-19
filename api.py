@@ -145,4 +145,13 @@ async def registrar_usuario(nombre: str = Form(...),direccion: str = Form(...),v
     
     with open(ruta_imagen, "wb") as imagen:
         contenido = await fotografia.read()
-        imagen.write(contenido)
+         imagen.write(contenido)
+        
+    respuesta = {
+        "Nombre": nombre,
+        "Direccion": direccion,
+        "Vip": vip,
+        "Ruta_foto": str(ruta_imagen)
+        
+    }
+    return respuesta
