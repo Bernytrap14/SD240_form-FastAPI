@@ -142,3 +142,7 @@ async def registrar_usuario(nombre: str = Form(...),direccion: str = Form(...),v
     nombre_archivo = uuid.uuid4() #nombre en formato hexadecimal
     extension_foto = os.path.splitext(foto.filename)[1]
     ruta_imagen = f'{home_usuario}/fotos_usuario/{nombre_archivo}{extension_foto}'
+    
+    with open(ruta_imagen, "wb") as imagen:
+        contenido = await fotografia.read()
+        imagen.write(contenido)
