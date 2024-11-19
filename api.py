@@ -131,3 +131,9 @@ def borrar_usuario(id:int):
         usuarios.remove(usuario)
     
     return {"status_borrado", "ok"}
+
+    @app.post("/registro")
+async def registrar_usuario(nombre: str = Form(...),direccion: str = Form(...),vip: bool = Form(False),fotografia: UploadFile = File(...)):
+    print(f"Nombre: {nombre}")
+    print(f"Dirección: {direccion}")
+    print(f"VIP: {'Sí' if vip else 'No'}")
