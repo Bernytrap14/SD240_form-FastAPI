@@ -137,3 +137,8 @@ async def registrar_usuario(nombre: str = Form(...),direccion: str = Form(...),v
     print(f"Nombre: {nombre}")
     print(f"Dirección: {direccion}")
     print(f"VIP: {'Sí' if vip else 'No'}")
+    
+    home_usuario = os.path.expanduser("~") #home usuario
+    nombre_archivo = uuid.uuid4() #nombre en formato hexadecimal
+    extension_foto = os.path.splitext(foto.filename)[1]
+    ruta_imagen = f'{home_usuario}/fotos_usuario/{nombre_archivo}{extension_foto}'
