@@ -133,25 +133,40 @@ def borrar_usuario(id:int):
     return {"status_borrado", "ok"}
 
     @app.post("/registro")
-    async def registrar_usuario(nombre: str = Form(...),direccion: str = Form(...),vip: bool = Form(False),fotografia: UploadFile = File(...)):
+async def registrar_usuario(
+    nombre: str = Form(...),
+    direccion: str = Form(...),
+    vip: bool = Form(False),
+    fotografia: UploadFile = File(...)
+):
+    # Determinar el directorio de almacenamiento
+    home_usuario = os.path.expanduser("~")
+    if vip:
+        carpeta = os.path.join(home_usuario, "fotos-usuarios-vip")
+    else:
+        carpeta = os.path.join(home_usuario, "fotos-usuarios")
+    
+    # Crear la carpeta si no existe
+    os.makedirs(carpeta, exist_ok=True)
+    
+    # Guardar la foto con un nombre único
+    nombre_archivo = f"{uuid.uuid4()}{os.path.splitext(fotografia.filename)[1]}"
+    ruta_foto = os.path.join(carpeta, nombre_archivo)
+    
+    with open(ruta_foto, "wb") as archivo:
+        contenido = await fotografia.read()
+        archivo.write(contenido)
+    
+    # Imprimir los datos en la terminal    
     print(f"Nombre: {nombre}")
     print(f"Dirección: {direccion}")
     print(f"VIP: {'Sí' if vip else 'No'}")
     
-    home_usuario = os.path.expanduser("~") #home usuario
-    nombre_archivo = uuid.uuid4() #nombre en formato hexadecimal
-    extension_foto = os.path.splitext(fotografia.filename)[1]
-    ruta_imagen = f'{home_usuario}/fotos_usuario/{nombre_archivo}{extension_foto}'
-    
-    with open(ruta_imagen, "wb") as imagen:
-        contenido = await fotografia.read()
-         imagen.write(contenido)
-        
-    respuesta = {
-        "Nombre": nombre,
-        "Direccion": direccion,
-        "Vip": vip,
-        "Ruta_foto": str(ruta_imagen)
+    return {
+        "nombre": nombre,
+        "direccion": direccion,
+        "vip": vip,
+        "ruta_foto": ruta_foto
         
     }
     return respuesta
