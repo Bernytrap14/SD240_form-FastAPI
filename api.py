@@ -133,13 +133,7 @@ def borrar_usuario(id:int):
     return {"status_borrado", "ok"}
 
     @app.post("/registro")
-async def registrar_usuario(
-    nombre: str = Form(...),
-    direccion: str = Form(...),
-    vip: bool = Form(False),
-    fotografia: UploadFile = File(...)
-):
-    # Determinar el directorio de almacenamiento
+async def registrar_usuario(nombre: str = Form(...),direccion: str = Form(...),vip: bool = Form(False),fotografia: UploadFile = File(...)):
     home_usuario = os.path.expanduser("~")
     if vip:
         carpeta = os.path.join(home_usuario, "fotos-usuarios-vip")
@@ -162,7 +156,7 @@ async def registrar_usuario(
     print(f"Dirección: {direccion}")
     print(f"VIP: {'Sí' if vip else 'No'}")
     
-    return {
+    respuesta = {
         "nombre": nombre,
         "direccion": direccion,
         "vip": vip,
